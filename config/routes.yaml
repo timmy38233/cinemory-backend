@@ -4,6 +4,10 @@ controllers:
         namespace: App\Controller
     type: attribute
 
-health_check:
-    path: /healthcheck
-    controller: App\Controller\HealthCheckController::getHealthcheck
+http_health_check:
+    path: /httpHealthCheck
+    controller: App\Controller\HealthCheckController::getHttpHealthCheck
+
+db_health_check:
+    path: /databaseHealthCheck
+    controller: App\Controller\HealthCheckController::getDatabaseHealthcheck
