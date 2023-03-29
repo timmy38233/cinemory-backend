@@ -10,6 +10,7 @@ class HealthCheckController extends AbstractController
         public EntityManagerInterface $entityManager
     ) {
     }
+    
     public function getHttpHealthCheck()
     {
         return $this->json(['status' => 'reachable']);
