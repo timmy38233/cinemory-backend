@@ -11,3 +11,15 @@ http_health_check:
 db_health_check:
     path: /databaseHealthCheck
     controller: App\Controller\HealthCheckController::getDatabaseHealthcheck
+
+api_login_check:
+    path: /api/login_check
+
+api_register:
+    path: /api/register
+    controller: App\Controller\RegistrationController::register
+    methods: ['POST']
+
+api_dashboard:
+    path: /api/dashboard
+    controller: App\Controller\DashboardController::index
