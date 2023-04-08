@@ -23,3 +23,7 @@ api_register:
 api_dashboard:
     path: /api/dashboard
     controller: App\Controller\DashboardController::index
+
+api_movie_search:
+    path: /api/movie/search
+    controller: App\Controller\MovieController::search
