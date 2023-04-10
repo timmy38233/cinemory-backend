@@ -18,12 +18,15 @@ api_login_check:
 api_register:
     path: /api/register
     controller: App\Controller\RegistrationController::register
-    methods: ['POST']
-
-api_dashboard:
-    path: /api/dashboard
-    controller: App\Controller\DashboardController::index
+    methods: [ 'POST' ]
 
 api_movie_search:
-    path: /api/movie/search
+    path: /api/movie/search/{page}
     controller: App\Controller\MovieController::search
+    defaults: { page: 1 }
+    methods: [ 'GET' ]
+
+api_movie_get:
+    path: /api/movie/get/{tmdbId}
+    controller: App\Controller\MovieController::get
+    methods: [ 'GET' ]
