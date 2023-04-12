@@ -46,7 +46,7 @@ security:
         - { path: ^/dbHealthCheck, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api/movie, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/movie/public/, roles: PUBLIC_ACCESS }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

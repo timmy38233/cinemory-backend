@@ -20,9 +20,15 @@ api_register:
     controller: App\Controller\RegistrationController::register
     methods: [ 'POST' ]
 
+api_movie_discover:
+    path: /api/movie/public/discover/{page}
+    controller: App\Controller\MovieController::publicDiscover
+    defaults: { page: 1 }
+    methods: [ 'GET' ]
+
 api_movie_search:
-    path: /api/movie/search/{page}
-    controller: App\Controller\MovieController::search
+    path: /api/movie/public/search/{page}
+    controller: App\Controller\MovieController::publicSearch
     defaults: { page: 1 }
     methods: [ 'GET' ]
 

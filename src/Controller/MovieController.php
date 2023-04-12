@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\UserMovieMeta;
 use App\Repository\UserMovieMetaRepository;
 use App\Service\MoviePersistenceService;
 use App\Service\TmdbService;
@@ -10,10 +11,7 @@ use App\Service\UserMovieMetaFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class MovieController extends AbstractController
 {
@@ -27,7 +25,20 @@ class MovieController extends AbstractController
 
     }
 
-    public function search(int $page, Request $request): JsonResponse
+    public function publicDiscover(int $page): JsonResponse
+    {
+        $date = new \DateTime();
+
+        $movies = $this->tmdbService->discover($date, $page);
+
+        return $this->json([
+            'status' => 'success',
+            'detail' => 'movie_discover',
+            'results' => $movies,
+        ]);
+
+    }
+    public function publicSearch(int $page, Request $request): JsonResponse
     {
 
         $searchTerm = $request->query->get('searchTerm');
@@ -52,6 +63,10 @@ class MovieController extends AbstractController
     public function get(int $tmdbId, #[CurrentUser] ?User $user): JsonResponse
     {
         $movie = $this->moviePersistenceService->get($tmdbId);
+
+        /*$movie->getUserMovieMetas()->filter(function(UserMovieMeta $userMovieMeta) use ($user) {
+            return $userMovieMeta->getUser() === $user;
+        });*/
 
         return $this->json([
             'status' => 'success',

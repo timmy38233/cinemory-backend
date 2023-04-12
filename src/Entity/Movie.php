@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 class Movie
@@ -46,9 +47,11 @@ class Movie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imdbId = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: WatchList::class, mappedBy: 'movies')]
     private Collection $watchLists;
 
+    #[Ignore]
     #[ORM\OneToMany(mappedBy: 'movie', targetEntity: UserMovieMeta::class)]
     private Collection $userMovieMetas;
 
