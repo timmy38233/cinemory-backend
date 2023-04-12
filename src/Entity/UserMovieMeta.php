@@ -5,19 +5,23 @@ namespace App\Entity;
 use App\Repository\UserMovieMetaRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: UserMovieMetaRepository::class)]
 class UserMovieMeta
 {
+    #[Ignore]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'userMovieMetas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[Ignore]
     #[ORM\ManyToOne(inversedBy: 'userMovieMetas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Movie $movie = null;

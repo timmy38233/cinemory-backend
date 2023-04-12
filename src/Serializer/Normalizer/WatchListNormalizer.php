@@ -2,33 +2,36 @@
 
 namespace App\Serializer\Normalizer;
 
-use App\Entity\UserMovieMeta;
+use App\Entity\Movie;
+use App\Entity\WatchList;
 use Symfony\Component\Serializer\Normalizer\CacheableSupportsMethodInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class UserMovieMetaNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
+class WatchListNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
     public function __construct(private ObjectNormalizer $normalizer)
     {
     }
 
-    /**
-     * @param UserMovieMeta $object
-     */
+    /** @param WatchList $object */
     public function normalize($object, string $format = null, array $context = []): array
     {
-        $data = $this->normalizer->normalize($object, null, $context);
+        $data = $this->normalizer->normalize($object, $format, $context);
 
         $data['user'] = $object->getUser()->getUserIdentifier();
-        $data['movie'] = $object->getMovie()->getTmdbId();
+
+        $data['movies'] = $object->getMovies()->map(function($movie) {
+            /** @var Movie $movie */
+            return $movie->getTmdbId();
+        })->toArray();
 
         return $data;
     }
 
     public function supportsNormalization($data, string $format = null, array $context = []): bool
     {
-        return $data instanceof \App\Entity\UserMovieMeta;
+        return $data instanceof \App\Entity\WatchList;
     }
 
     public function hasCacheableSupportsMethod(): bool

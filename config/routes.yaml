@@ -35,3 +35,28 @@ api_movie_add_meta:
     path: /api/movie/addMeta/{tmdbId}
     controller: App\Controller\MovieController::addMeta
     methods: [ 'POST' ]
+
+api_watchlist_new:
+    path: /api/watchlist/new
+    controller: App\Controller\WatchListController::new
+    methods: [ 'POST' ]
+
+api_watchlist_list:
+    path: /api/watchlist/list
+    controller: App\Controller\WatchListController::list
+    methods: [ 'GET' ]
+
+api_watchlist_add:
+    path: /api/watchlist/{watchListId}/addMovie
+    controller: App\Controller\WatchListController::addMovie
+    methods: [ 'POST' ]
+
+api_watchlist_remove:
+    path: /api/watchlist/{watchListId}/removeMovie
+    controller: App\Controller\WatchListController::removeMovie
+    methods: [ 'DELETE' ]
+
+api_watchlist_get:
+    path: /api/watchlist/{watchListId}/getMovies
+    controller: App\Controller\WatchListController::getMovies
+    methods: [ 'GET' ]

@@ -41,9 +41,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserMovieMeta::class)]
     private Collection $userMovieMetas;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: WatchList::class)]
+    private Collection $watchLists;
+
     public function __construct()
     {
         $this->userMovieMetas = new ArrayCollection();
+        $this->watchLists = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,6 +180,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userMovieMeta->getUser() === $this) {
                 $userMovieMeta->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, WatchList>
+     */
+    public function getWatchLists(): Collection
+    {
+        return $this->watchLists;
+    }
+
+    public function addWatchList(WatchList $watchList): self
+    {
+        if (!$this->watchLists->contains($watchList)) {
+            $this->watchLists->add($watchList);
+            $watchList->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWatchList(WatchList $watchList): self
+    {
+        if ($this->watchLists->removeElement($watchList)) {
+            // set the owning side to null (unless already changed)
+            if ($watchList->getUser() === $this) {
+                $watchList->setUser(null);
             }
         }
 

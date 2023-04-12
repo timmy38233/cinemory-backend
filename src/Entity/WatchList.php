@@ -6,6 +6,7 @@ use App\Repository\WatchListRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: WatchListRepository::class)]
 class WatchList
@@ -18,8 +19,14 @@ class WatchList
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[Ignore]
     #[ORM\ManyToMany(targetEntity: Movie::class, inversedBy: 'watchLists')]
     private Collection $movies;
+
+    #[Ignore]
+    #[ORM\ManyToOne(inversedBy: 'watchLists')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -63,6 +70,18 @@ class WatchList
     public function removeMovie(Movie $movie): self
     {
         $this->movies->removeElement($movie);
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
