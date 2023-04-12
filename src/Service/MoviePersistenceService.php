@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Movie;
 use App\Repository\MovieRepository;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class MoviePersistenceService
 {
