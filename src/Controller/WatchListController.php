@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -71,7 +72,7 @@ class WatchListController extends AbstractController
                 'title' => $watchList->getTitle(),
                 'user' => $watchList->getUser()->getUserIdentifier(),
             ],
-        ]);
+        ], Response::HTTP_BAD_REQUEST);
     }
 
     public function addMovie(int $watchListId, Request $request, #[CurrentUser] ?User $user)
@@ -112,6 +113,20 @@ class WatchListController extends AbstractController
         ]);
     }
 
+    public function getMovies(int $watchListId, #[CurrentUser] ?User $user)
+    {
+        $watchList = $this->watchListRepository->findOneBy([
+            'id' => $watchListId,
+            'user' => $user
+        ]);
+
+        return $this->json([
+            'status' => 'success',
+            'detail' => 'watchlist_get_movies',
+            'result' => $watchList,
+        ]);
+    }
+
     public function removeMovie(int $watchListId, Request $request, #[CurrentUser] ?User $user)
     {
         $watchList = $this->watchListRepository->findOneBy([
@@ -147,20 +162,6 @@ class WatchListController extends AbstractController
                 'user' => $watchList->getUser()->getUserIdentifier(),
                 'movie' => $movie->getTmdbId(),
             ]
-        ]);
-    }
-
-    public function getMovies(int $watchListId, #[CurrentUser] ?User $user)
-    {
-        $watchList = $this->watchListRepository->findOneBy([
-            'id' => $watchListId,
-            'user' => $user
-        ]);
-
-        return $this->json([
-            'status' => 'success',
-            'detail' => 'watchlist_get_movies',
-            'result' => $watchList,
         ]);
     }
 }
