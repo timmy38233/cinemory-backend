@@ -33,12 +33,12 @@ api_movie_search:
     methods: [ 'GET' ]
 
 api_movie_get:
-    path: /api/movie/get/{tmdbId}
+    path: /api/movie/get/{id}
     controller: App\Controller\MovieController::get
     methods: [ 'GET' ]
 
 api_movie_add_meta:
-    path: /api/movie/addMeta/{tmdbId}
+    path: /api/movie/addMeta/{id}
     controller: App\Controller\MovieController::addMeta
     methods: [ 'POST' ]
 

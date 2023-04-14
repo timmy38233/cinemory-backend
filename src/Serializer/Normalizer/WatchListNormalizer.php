@@ -23,7 +23,7 @@ class WatchListNormalizer implements NormalizerInterface, CacheableSupportsMetho
 
         $data['movies'] = $object->getMovies()->map(function($movie) {
             /** @var Movie $movie */
-            return $movie->getTmdbId();
+            return $movie->getId();
         })->toArray();
 
         return $data;

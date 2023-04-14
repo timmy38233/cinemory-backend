@@ -21,7 +21,7 @@ class UserMovieMetaNormalizer implements NormalizerInterface, CacheableSupportsM
         $data = $this->normalizer->normalize($object, null, $context);
 
         $data['user'] = $object->getUser()->getUserIdentifier();
-        $data['movie'] = $object->getMovie()->getTmdbId();
+        $data['movie'] = $object->getMovie()->getId();
 
         return $data;
     }

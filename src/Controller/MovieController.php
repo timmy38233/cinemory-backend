@@ -31,10 +31,16 @@ class MovieController extends AbstractController
 
         $movies = $this->tmdbService->discover($date, $page);
 
+        $moviesResultSet = [];
+
+        foreach ($movies['results'] as $movie) {
+            $moviesResultSet[] = $this->moviePersistenceService->get($movie['id']);
+        }
+
         return $this->json([
             'status' => 'success',
             'detail' => 'movie_discover',
-            'results' => $movies,
+            'results' => $moviesResultSet,
         ]);
 
     }
@@ -52,17 +58,23 @@ class MovieController extends AbstractController
 
         $movies = $this->tmdbService->searchMovie($searchTerm, $page);
 
+        $moviesResultSet = [];
+
+        foreach ($movies['results'] as $movie) {
+            $moviesResultSet[] = $this->moviePersistenceService->get($movie['id']);
+        }
+
         return $this->json([
             'status' => 'success',
             'detail' => 'movie_search',
             'searchTerm' => $searchTerm,
-            'results' => $movies,
+            'results' => $moviesResultSet,
         ]);
     }
 
-    public function get(int $tmdbId, #[CurrentUser] ?User $user): JsonResponse
+    public function get(int $id, #[CurrentUser] ?User $user): JsonResponse
     {
-        $movie = $this->moviePersistenceService->get($tmdbId);
+        $movie = $this->moviePersistenceService->get($id);
 
         /*$movie->getUserMovieMetas()->filter(function(UserMovieMeta $userMovieMeta) use ($user) {
             return $userMovieMeta->getUser() === $user;
@@ -71,14 +83,14 @@ class MovieController extends AbstractController
         return $this->json([
             'status' => 'success',
             'detail' => 'movie_get',
-            'tmdbId' => $tmdbId,
+            'id' => $id,
             'result' => $movie,
         ]);
     }
 
-    public function addMeta(int $tmdbId, Request $request, #[CurrentUser] ?User $user): JsonResponse
+    public function addMeta(int $id, Request $request, #[CurrentUser] ?User $user): JsonResponse
     {
-        $movie = $this->moviePersistenceService->get($tmdbId);
+        $movie = $this->moviePersistenceService->get($id);
 
         $userNotes = json_decode($request->getContent(), true);
 
@@ -98,7 +110,7 @@ class MovieController extends AbstractController
         return $this->json([
             'status' => 'success',
             'detail' => 'movie_add_meta',
-            'tmdbId' => $tmdbId,
+            'id' => $id,
             'result' => $userMovieMeta,
         ]);
     }

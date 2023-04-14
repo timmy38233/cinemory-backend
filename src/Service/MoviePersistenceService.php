@@ -16,12 +16,12 @@ class MoviePersistenceService
 
     }
 
-    public function get(int $tmdbId): Movie
+    public function get(int $id): Movie
     {
-        $movie = $this->movieRepository->findOneBy(['tmdbId' => $tmdbId]);
+        $movie = $this->movieRepository->find($id);
 
         if (!$movie) {
-            $movieData = $this->tmdbService->getMovieDetails($tmdbId);
+            $movieData = $this->tmdbService->getMovieDetails($id);
             $movie = $this->saveFromApi($movieData);
         }
 
@@ -30,13 +30,15 @@ class MoviePersistenceService
 
     private function saveFromApi(array $movieData): Movie
     {
+        $releaseDate = \DateTime::createFromFormat("Y-m-d", $movieData['release_date']);
+
         $movie = (new Movie())
-            ->setTmdbId($movieData['id'])
+            ->setId($movieData['id'])
             ->setTitle($movieData['title'])
             ->setOriginalTitle($movieData['original_title'])
             ->setOriginalLanguage($movieData['original_language'])
             ->setOverview($movieData['overview'])
-            ->setReleaseDate(\DateTime::createFromFormat("Y-m-d", $movieData['release_date']))
+            ->setReleaseDate(($releaseDate instanceof \DateTimeInterface) ? $releaseDate : null)
             ->setPosterPath($movieData['poster_path'])
             ->setRuntime($movieData['runtime'])
             ->setReleaseStatus($movieData['status'])

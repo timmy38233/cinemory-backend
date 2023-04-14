@@ -55,8 +55,8 @@ class TmdbService
 
     }
 
-    public function getMovieDetails(int $tmdbId): array {
-        $url = self::TMDB_BASE_URL . self::TMDB_MOVIE_DETAIL_ENDPOINT . $tmdbId;
+    public function getMovieDetails(int $id): array {
+        $url = self::TMDB_BASE_URL . self::TMDB_MOVIE_DETAIL_ENDPOINT . $id;
 
         $response = $this->httpClient->request('GET', $url,
             [

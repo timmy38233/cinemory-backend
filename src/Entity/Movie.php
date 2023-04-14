@@ -13,12 +13,8 @@ use Symfony\Component\Serializer\Annotation\Ignore;
 class Movie
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private ?int $tmdbId = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -73,14 +69,9 @@ class Movie
         return $this->id;
     }
 
-    public function getTmdbId(): ?int
+    public function setId(int $id): self
     {
-        return $this->tmdbId;
-    }
-
-    public function setTmdbId(int $tmdbId): self
-    {
-        $this->tmdbId = $tmdbId;
+        $this->id = $id;
 
         return $this;
     }
@@ -138,7 +129,7 @@ class Movie
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTimeInterface $releaseDate): self
+    public function setReleaseDate(?\DateTimeInterface $releaseDate): self
     {
         $this->releaseDate = $releaseDate;
 

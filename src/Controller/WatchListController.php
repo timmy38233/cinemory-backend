@@ -32,7 +32,7 @@ class WatchListController extends AbstractController
         return $this->json([
             'status' => 'success',
             'detail' => 'watchlist_list',
-            'result' => [$watchLists],
+            'result' => $watchLists,
         ]);
     }
 
@@ -83,7 +83,7 @@ class WatchListController extends AbstractController
         ]);
 
         $jsonData = json_decode($request->getContent(), true, flags: JSON_THROW_ON_ERROR);
-        $movie = $this->moviePersistenceService->get($jsonData['tmdbId']);
+        $movie = $this->moviePersistenceService->get($jsonData['id']);
 
         if ($watchList->getMovies()->contains($movie)) {
             return $this->json([
@@ -93,7 +93,7 @@ class WatchListController extends AbstractController
                     'id' => $watchList->getId(),
                     'title' => $watchList->getTitle(),
                     'user' => $watchList->getUser()->getUserIdentifier(),
-                    'movie' => $movie->getTmdbId(),
+                    'movie' => $movie->getId(),
                 ]
             ]);
         }
@@ -108,7 +108,7 @@ class WatchListController extends AbstractController
                 'id' => $watchList->getId(),
                 'title' => $watchList->getTitle(),
                 'user' => $watchList->getUser()->getUserIdentifier(),
-                'movie' => $movie->getTmdbId(),
+                'movie' => $movie->getId(),
             ]
         ]);
     }
@@ -120,10 +120,20 @@ class WatchListController extends AbstractController
             'user' => $user
         ]);
 
+        $moviesResultSet = [];
+
+        foreach ($watchList->getMovies() as $movie) {
+            $moviesResultSet[] = $movie;
+        }
+
         return $this->json([
             'status' => 'success',
             'detail' => 'watchlist_get_movies',
-            'result' => $watchList,
+            'result' => [
+                'watchList' => $watchList->getId(),
+                'user' => $watchList->getUser()->getUserIdentifier(),
+                'movies' => $moviesResultSet,
+            ],
         ]);
     }
 
@@ -135,7 +145,7 @@ class WatchListController extends AbstractController
         ]);
 
         $jsonData = json_decode($request->getContent(), true, flags: JSON_THROW_ON_ERROR);
-        $movie = $this->moviePersistenceService->get($jsonData['tmdbId']);
+        $movie = $this->moviePersistenceService->get($jsonData['id']);
 
         if (!$watchList->getMovies()->contains($movie)) {
             return $this->json([
@@ -145,7 +155,7 @@ class WatchListController extends AbstractController
                     'id' => $watchList->getId(),
                     'title' => $watchList->getTitle(),
                     'user' => $watchList->getUser()->getUserIdentifier(),
-                    'movie' => $movie->getTmdbId(),
+                    'movie' => $movie->getId(),
                 ]
             ]);
         }
@@ -160,7 +170,7 @@ class WatchListController extends AbstractController
                 'id' => $watchList->getId(),
                 'title' => $watchList->getTitle(),
                 'user' => $watchList->getUser()->getUserIdentifier(),
-                'movie' => $movie->getTmdbId(),
+                'movie' => $movie->getId(),
             ]
         ]);
     }
